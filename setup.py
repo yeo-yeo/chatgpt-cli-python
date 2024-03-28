@@ -9,7 +9,7 @@ setup(
     url='https://github.com/yeo-yeo/chatgpt-cli-python',
     packages=find_packages(),
     install_requires=[
-        # Add dependencies
+       'aiohttp', 
     ],
     entry_points={
         'console_scripts': [
