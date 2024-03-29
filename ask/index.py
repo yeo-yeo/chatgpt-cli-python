@@ -49,12 +49,12 @@ async def main_impl():
     while True:
         fetched_data = asyncio.Event()
         user_input = input("> ")
-        conversation[f"{time.time()}-user"] = user_input
+        conversation[time.time()] = {'content': user_input, 'role': 'user'}
 
         [[key, whole_response], _] = await asyncio.gather(
-            fetch_data(user_input, fetched_data), print_waiting(fetched_data)
+            fetch_data(conversation, fetched_data), print_waiting(fetched_data)
         )
-        conversation[key] = whole_response
+        conversation[key] = {'content': whole_response, 'role': 'assistant'}
         print("\n")
 
 

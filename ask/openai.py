@@ -5,14 +5,15 @@ from colorama import Style
 import time
 
 
-async def fetch_data(user_input, fetched_data):
+async def fetch_data(conversation, fetched_data):
     api_key = get_api_key()
 
     headers = {"Authorization": f"Bearer {api_key}", "content-type": "application/json"}
     url = f"https://api.openai.com/v1/chat/completions"
+    
     payload = {
         "model": "gpt-3.5-turbo",
-        "messages": [{"role": "user", "content": user_input}],
+        "messages": [value for value in conversation.values()],
         "temperature": 0.7,
         "stream": True,
     }
