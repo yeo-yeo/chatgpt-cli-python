@@ -4,13 +4,11 @@ from ask.utils import get_api_key
 from colorama import Style
 import time
 
-
-async def fetch_data(conversation, fetched_data):
+# Fn to call the bot and print its response as it streams in
+async def fetch_data(conversation, fetched_data_flag):
     api_key = get_api_key()
-
     headers = {"Authorization": f"Bearer {api_key}", "content-type": "application/json"}
     url = f"https://api.openai.com/v1/chat/completions"
-    
     payload = {
         "model": "gpt-3.5-turbo",
         "messages": [value for value in conversation.values()],
@@ -25,22 +23,26 @@ async def fetch_data(conversation, fetched_data):
             ) as response:
                 if response.status == 200:
                     # Response received - can stop printing the 'Thinking...' message
-                    fetched_data.set()
+                    fetched_data_flag.set()
                     timestamp = time.time()
                     whole_response = []
 
                     print(Style.RESET_ALL, "\n\n> 🤖")
-                    # Iterate through the response content in chunks
+                    # TODO: add link about SSEs
+                    # The streaming response is SSEs - process each event by iterating through the chunks,
+                    # instead of waiting for the whole request to finish
                     async for chunk in response.content:
                         try:
-                            # Remove the 'data: ' prefix from SSE response
-                            parsed = json.loads(chunk[6:].decode("utf-8"))
+                            parsed = json.loads(chunk.removeprefix("data: ").decode("utf-8"))
+                            # TODO: validate that the event looks like what you expect, and handle better if not
                             chunk_message = parsed["choices"][0]["delta"]["content"]
+                            # TODO: just have a string that gets longer? and add it directly here instead of returning
+                            # Append each chunk to a list that will be added to the conversation object
                             whole_response.append(chunk_message)
                             print(chunk_message, end="", flush=True)
                         except:
                             pass
-                    return f"{timestamp}-bot", "".join(whole_response)
+                    conversation[f"{timestamp}-bot"] = {'content': "".join(whole_response), 'role': 'assistant'}
                 else:
                     print(f"Error calling OpenAI.  API response: {response.status}")
     except aiohttp.ClientError as e:
