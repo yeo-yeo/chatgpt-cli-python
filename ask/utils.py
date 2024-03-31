@@ -22,8 +22,7 @@ def get_api_key():
     config = get_config()
     api_key = config.get(api_key_key, None)
     if api_key == None:
-        # TODO: add colour
-        print("Unable to find API key.  Have you created run `ask init`?")
+        print(Fore.RED + "Unable to find API key.  Have you created run `ask init`?" + Style.RESET_ALL)
         return
     return api_key
 

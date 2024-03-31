@@ -28,15 +28,15 @@ async def fetch_data(conversation, fetched_data_flag):
                     whole_response = []
 
                     print(Style.RESET_ALL, "\n\n> 🤖")
-                    # TODO: add link about SSEs
                     # The streaming response is SSEs - process each event by iterating through the chunks,
                     # instead of waiting for the whole request to finish
+                    # https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events
                     async for chunk in response.content:
                         try:
-                            parsed = json.loads(chunk.removeprefix("data: ").decode("utf-8"))
+                            parsed = json.loads(chunk.decode("utf-8").removeprefix("data: "))
                             # TODO: validate that the event looks like what you expect, and handle better if not
                             chunk_message = parsed["choices"][0]["delta"]["content"]
-                            # TODO: just have a string that gets longer? and add it directly here instead of returning
+                            # TODO: just have a string that gets longer?
                             # Append each chunk to a list that will be added to the conversation object
                             whole_response.append(chunk_message)
                             print(chunk_message, end="", flush=True)

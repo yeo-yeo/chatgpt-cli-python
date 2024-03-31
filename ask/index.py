@@ -36,7 +36,7 @@ async def main_impl():
     # Handle init setup
     if args.command == "init":
         print(
-            "Welcome to ask! To get started you will need to generate an OpenAI API key and paste it here to save it to your ask config.\nVisit https://platform.openai.com/api-keys.  It should have the format 'sk-{20chars}'"
+            Fore.YELLOW + "Welcome to ask! To get started you will need to generate an OpenAI API key and paste it here to save it to your ask config.\n\nVisit " + Fore.WHITE + "https://platform.openai.com/api-keys." + Fore.YELLOW + "\n\nThe key should be like sk-{20chars}\n" + Style.RESET_ALL
         )
         key = input("Please paste your key: ")
         os.makedirs(app_directory, exist_ok=True)
