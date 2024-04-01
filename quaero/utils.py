@@ -37,13 +37,14 @@ async def print_waiting(fetched_data):
 
 # Save conversation so it can be resumed or revisited
 def save_to_file(output):
-    current_datetime = datetime.datetime.now()
-    date, time = current_datetime.strftime("%Y%m%d"), current_datetime.strftime(
-        "%H%M%S"
-    )
-    output_directory = os.path.join(app_directory, date)
-    os.makedirs(output_directory, exist_ok=True)
-    file_path = os.path.join(output_directory, time)
-    with open(file_path, "w+") as file:
-        file.write(json.dumps(output))
-    return f"{date}/{time}"
+    if len(output.keys()):
+        current_datetime = datetime.datetime.now()
+        date, time = current_datetime.strftime("%Y%m%d"), current_datetime.strftime(
+            "%H%M%S"
+        )
+        output_directory = os.path.join(app_directory, date)
+        os.makedirs(output_directory, exist_ok=True)
+        file_path = os.path.join(output_directory, time)
+        with open(file_path, "w+") as file:
+            file.write(json.dumps(output))
+        return f"{date}/{time}"

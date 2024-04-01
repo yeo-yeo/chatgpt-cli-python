@@ -7,6 +7,7 @@ import signal
 import sys
 from colorama import Fore, Style
 import time
+import json
 
 from quaero.openai import fetch_data
 from quaero.utils import print_waiting, save_to_file, check_for_config
@@ -19,7 +20,8 @@ async def main_impl():
     def quit_handler(sig, frame):
         print("\nExiting script...")
         id = save_to_file(conversation)
-        print("Conversation ID: ", id)
+        if id:
+            print("Conversation ID: ", id)
         sys.exit(0)
 
     signal.signal(signal.SIGINT, quit_handler)
@@ -40,7 +42,7 @@ async def main_impl():
         )
         key = input("Please paste your key: ")
         os.makedirs(app_directory, exist_ok=True)
-        with open(os.path.expanduser(config_path), "w+") as file:
+        with open(config_path, "w+") as file:
             file.write(f"{api_key_key}={key.strip()}")
         print("Success!  You are ready to ask your first question.")
 
@@ -54,8 +56,13 @@ async def main_impl():
     # TODO: clean out old conversations
         
     if args.conversation:
-        # TODO - validate, load into conversation object if present
-        pass
+        d, t = args.conversation[0].split('/')
+        conversation_path = os.path.join(app_directory, d, t)
+        if not os.path.isfile(conversation_path):
+            print(Fore.RED + "That conversation ID was not found" + Style.RESET_ALL)
+            sys.exit(1)
+        with open(conversation_path) as file:
+            conversation = json.load(file)
 
     while True:
         fetched_data_flag = asyncio.Event()
