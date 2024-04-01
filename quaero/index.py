@@ -8,9 +8,9 @@ import sys
 from colorama import Fore, Style
 import time
 
-from ask.openai import fetch_data
-from ask.utils import print_waiting, save_to_file, check_for_config
-from ask.consts import app_directory, api_key_key
+from quaero.openai import fetch_data
+from quaero.utils import print_waiting, save_to_file, check_for_config
+from quaero.consts import app_directory, api_key_key, config_path
 
 async def main_impl():
     conversation = {}
@@ -36,11 +36,11 @@ async def main_impl():
     # Handle init setup
     if args.command == "init":
         print(
-            Fore.YELLOW + "Welcome to ask! To get started you will need to generate an OpenAI API key and paste it here to save it to your ask config.\n\nVisit " + Fore.WHITE + "https://platform.openai.com/api-keys." + Fore.YELLOW + "\n\nThe key should be like sk-{20chars}\n" + Style.RESET_ALL
+            Fore.YELLOW + "Welcome to quaero! To get started you will need to generate an OpenAI API key and paste it here to save it to your quaero config.\n\nVisit " + Fore.WHITE + "https://platform.openai.com/api-keys." + Fore.YELLOW + "\n\nThe key should be like sk-{20chars}\n" + Style.RESET_ALL
         )
         key = input("Please paste your key: ")
         os.makedirs(app_directory, exist_ok=True)
-        with open(os.path.expanduser(app_directory), "w+") as file:
+        with open(os.path.expanduser(config_path), "w+") as file:
             file.write(f"{api_key_key}={key.strip()}")
         print("Success!  You are ready to ask your first question.")
 

@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 setup(
-    name="ask",
+    name="quaero",
     version="1.0.0",
     description="Simple CLI tool for asking ChatGPT questions in the CLI",
     author="Gillian Yeomans",
@@ -11,7 +11,7 @@ setup(
     install_requires=["aiohttp", "colorama", "python-dotenv"],
     entry_points={
         "console_scripts": [
-            "ask=ask.index:main",
+            "quaero=quaero.index:main",
         ],
     },
 )

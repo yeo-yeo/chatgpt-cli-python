@@ -1,6 +1,6 @@
 import json
 import aiohttp
-from ask.utils import get_api_key
+from quaero.utils import get_api_key
 from colorama import Style
 import time
 

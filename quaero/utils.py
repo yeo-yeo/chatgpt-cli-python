@@ -5,13 +5,13 @@ import asyncio
 import datetime
 import json
 
-from ask.consts import config_path, api_key_key, app_directory
+from quaero.consts import config_path, api_key_key, app_directory
 
 def check_for_config():
     # TODO: specifically check for existence of file rather than keys?
     config = get_config()
     if not config.get("API_KEY", None):
-        raise Exception("Config not set up properly.  Have you run `ask init`?")
+        raise Exception("Config not set up properly.  Have you run `quaero init`?")
 
 
 def get_config():
@@ -22,7 +22,7 @@ def get_api_key():
     config = get_config()
     api_key = config.get(api_key_key, None)
     if api_key == None:
-        print(Fore.RED + "Unable to find API key.  Have you created run `ask init`?" + Style.RESET_ALL)
+        print(Fore.RED + "Unable to find API key.  Have you created run `quaero init`?" + Style.RESET_ALL)
         return
     return api_key
 
